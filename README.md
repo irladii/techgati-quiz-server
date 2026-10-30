@@ -1,1 +1,0 @@
-# techgati-quiz-server
