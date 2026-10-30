@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Techgati Algorithm Quiz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #0a0a1a;
+      --bg-card: rgba(255, 255, 255, 0.04);
+      --border: rgba(255, 255, 255, 0.08);
+      --text-primary: #f0f0f5;
+      --text-secondary: #8888aa;
+      --accent: #6c5ce7;
+      --accent-glow: rgba(108, 92, 231, 0.3);
+      --success: #00b894;
+      --danger: #e74c3c;
+      --radius: 16px;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg-primary);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at 30% 20%, rgba(108, 92, 231, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(0, 184, 148, 0.06) 0%, transparent 50%);
+      animation: bgShift 20s ease-in-out infinite alternate;
+      z-index: -1;
+    }
+
+    @keyframes bgShift {
+      0% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+
+      100% {
+        transform: translate(-5%, -5%) rotate(3deg);
+      }
+    }
+
+    .register-container {
+      width: 100%;
+      max-width: 460px;
+      padding: 24px;
+    }
+
+    .logo-section {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .logo-circle {
+      width: 140px;
+      height: 140px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      overflow: hidden;
+      background-color: #f3f2ee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 0 3px rgba(255, 255, 255, 0.12);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .logo-circle:hover {
+      transform: scale(1.02);
+      box-shadow: 0 10px 36px rgba(108, 92, 231, 0.3), 0 0 0 3px rgba(108, 92, 231, 0.4);
+    }
+
+    .logo-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .logo-section h1 {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #f0f0f5, #a29bfe);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px;
+      backdrop-filter: blur(20px);
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text-primary);
+      font-size: 16px;
+      font-family: inherit;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      outline: none;
+    }
+
+    .form-group input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .form-group input::placeholder {
+      color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-register {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--accent), #a29bfe);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-register:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px var(--accent-glow);
+    }
+
+    .btn-register:active {
+      transform: translateY(0);
+    }
+
+    .btn-register:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .status-message {
+      margin-top: 20px;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      text-align: center;
+      display: none;
+    }
+
+    .status-message.error {
+      display: block;
+      background: rgba(231, 76, 60, 0.1);
+      border: 1px solid rgba(231, 76, 60, 0.3);
+      color: var(--danger);
+    }
+
+    .status-message.success {
+      display: block;
+      background: rgba(0, 184, 148, 0.1);
+      border: 1px solid rgba(0, 184, 148, 0.3);
+      color: var(--success);
+    }
+
+    .waiting-screen {
+      display: none;
+      text-align: center;
+      padding: 60px 36px;
+    }
+
+    .waiting-screen .spinner {
+      width: 48px;
+      height: 48px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 24px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .waiting-screen h2 {
+      font-size: 22px;
+      margin-bottom: 12px;
+    }
+
+    .waiting-screen p {
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .footer-note {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.15);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="register-container">
+    <div class="logo-section">
+      <div class="logo-circle">
+        <img src="/techgati-logo.jpg" alt="Techgati Club Logo">
+      </div>
+      <h1>Techgati Algorithm Quiz</h1>
+    </div>
+
+    <!-- Registration Form -->
+    <div class="card" id="registration-form">
+      <form id="regForm" autocomplete="off">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" placeholder="Enter your full name" required autofocus>
+        </div>
+        <div class="form-group">
+          <label for="roll">Roll Number</label>
+          <input type="text" id="roll" name="roll" placeholder="Enter your roll number" required>
+        </div>
+        <div class="form-group">
+          <label for="seat">Seat / PC Number *</label>
+          <input type="text" id="seat" name="seat" placeholder="e.g. PC12" required>
+        </div>
+        <button type="submit" class="btn-register" id="btnRegister">Start Quiz</button>
+        <div class="status-message" id="statusMessage"></div>
+
+      </form>
+    </div>
+
+    <!-- Waiting Screen (after registration, before form opens) -->
+    <div class="card waiting-screen" id="waiting-screen">
+      <div class="spinner"></div>
+      <h2>Registration Successful!</h2>
+      <p id="redirectText">Redirecting you to the quiz form in <span id="countdown">2</span>s...<br>Do not close this
+        window.</p>
+      <div style="margin-top: 24px;">
+        <button type="button" class="btn-register" id="btnDirectStart"
+          style="display:none; background: linear-gradient(135deg, #00b894, #00cec9); cursor: pointer;">
+          Click here to Open Quiz Now ➔
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('regForm');
+    const btnRegister = document.getElementById('btnRegister');
+    const statusMessage = document.getElementById('statusMessage');
+    const registrationForm = document.getElementById('registration-form');
+    const waitingScreen = document.getElementById('waiting-screen');
+    const btnDirectStart = document.getElementById('btnDirectStart');
+    const countdownEl = document.getElementById('countdown');
+
+    const SERVER_URL = window.location.origin;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const roll = document.getElementById('roll').value.trim();
+      const seat = document.getElementById('seat').value.trim();
+
+      if (!name || !roll || !seat) {
+        showStatus('Please enter your Name, Roll Number, and Seat / PC Number.', 'error');
+        return;
+      }
+
+      btnRegister.disabled = true;
+      btnRegister.textContent = 'Registering...';
+
+      try {
+        const res = await fetch(`${SERVER_URL}/api/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, roll, seat })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          throw new Error(data.error || 'Registration failed');
+        }
+
+        try {
+          localStorage.setItem('qg_participant', JSON.stringify(data.participant));
+        } catch (e) { }
+
+        window.postMessage({
+          type: 'QUIZ_GUARD_REGISTERED',
+          participant: {
+            id: data.participant.id,
+            name: data.participant.name,
+            roll: data.participant.roll,
+            seat: data.participant.seat,
+            token: data.participant.id
+          }
+        }, '*');
+
+        registrationForm.style.display = 'none';
+        waitingScreen.style.display = 'block';
+
+        const formUrl = (data.formUrl && data.formUrl !== '' && !data.formUrl.includes('YOUR_FORM_ID_HERE'))
+          ? data.formUrl
+          : 'https://forms.gle/ahA9Hmb2tpZEVjXCA';
+
+        const sep = formUrl.includes('?') ? '&' : '?';
+        const targetFormUrl = (data.participant && data.participant.id)
+          ? (formUrl + sep + 'qg_pid=' + encodeURIComponent(data.participant.id))
+          : formUrl;
+
+        let examStarted = false;
+        function triggerExamStart() {
+          if (examStarted) return;
+          examStarted = true;
+          try {
+            fetch(`${SERVER_URL}/api/start-exam`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ participantId: data.participant.id })
+            }).catch(() => { });
+          } catch (e) { }
+        }
+
+        btnDirectStart.addEventListener('click', () => {
+          triggerExamStart();
+          window.location.replace(targetFormUrl);
+        });
+
+        let seconds = 2;
+        const countdownInterval = setInterval(() => {
+          seconds--;
+          if (countdownEl) countdownEl.textContent = seconds;
+          if (seconds <= 0) {
+            clearInterval(countdownInterval);
+            triggerExamStart();
+            if (btnDirectStart) btnDirectStart.style.display = 'block';
+            window.location.replace(targetFormUrl);
+          }
+        }, 1000);
+
+        setTimeout(() => {
+          if (btnDirectStart) btnDirectStart.style.display = 'block';
+        }, 1200);
+
+      } catch (err) {
+        showStatus(err.message || 'Failed to register. Please try again.', 'error');
+        btnRegister.disabled = false;
+        btnRegister.textContent = 'Start Quiz';
+      }
+    });
+
+    function showStatus(msg, type) {
+      statusMessage.textContent = msg;
+      statusMessage.className = 'status-message ' + type;
+    }
+  </script>
+</body>
+
+</html>

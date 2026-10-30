@@ -1,0 +1,1739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Techgati Algorithm Quiz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-base: #090a0f;
+      --bg-surface: #10121b;
+      --bg-surface-hover: #161926;
+      --bg-surface-active: #1c2030;
+      --border-subtle: #1e2235;
+      --border-strong: #2a304a;
+      
+      --text-main: #f1f3f9;
+      --text-muted: #8b92ab;
+      --text-dim: #545b73;
+
+      --accent: #6366f1;
+      --accent-soft: rgba(99, 102, 241, 0.12);
+      --accent-border: rgba(99, 102, 241, 0.28);
+      
+      --emerald: #10b981;
+      --emerald-soft: rgba(16, 185, 129, 0.12);
+      --emerald-border: rgba(16, 185, 129, 0.28);
+
+      --amber: #f59e0b;
+      --amber-soft: rgba(245, 158, 11, 0.12);
+      --amber-border: rgba(245, 158, 11, 0.28);
+
+      --rose: #f43f5e;
+      --rose-soft: rgba(244, 63, 94, 0.12);
+      --rose-border: rgba(244, 63, 94, 0.28);
+
+      --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 14px;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Top Bar */
+    .topbar {
+      height: 64px;
+      border-bottom: 1px solid var(--border-subtle);
+      background-color: rgba(16, 18, 27, 0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 28px;
+    }
+
+    .brand-section {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      overflow: hidden;
+      background-color: #f3f2ee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
+      padding: 3px;
+    }
+
+    .brand-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      color: var(--text-main);
+    }
+
+    .brand-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-left: 6px;
+      padding-left: 8px;
+      border-left: 1px solid var(--border-strong);
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 12px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 500;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: var(--emerald);
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+      transition: background-color 0.3s ease;
+    }
+
+    .live-dot.disconnected {
+      background-color: var(--rose);
+      box-shadow: 0 0 8px rgba(244, 63, 94, 0.6);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-decoration: none;
+      border: 1px solid transparent;
+      outline: none;
+    }
+
+    .btn-secondary {
+      background-color: var(--bg-surface);
+      border-color: var(--border-subtle);
+      color: var(--text-main);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--bg-surface-hover);
+      border-color: var(--border-strong);
+    }
+
+    .btn-secondary svg {
+      width: 14px;
+      height: 14px;
+      color: var(--text-muted);
+    }
+
+    .btn-danger {
+      background-color: rgba(244, 63, 94, 0.08);
+      border-color: rgba(244, 63, 94, 0.25);
+      color: #fb7185;
+    }
+
+    .btn-danger:hover {
+      background-color: rgba(244, 63, 94, 0.16);
+      border-color: rgba(244, 63, 94, 0.45);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 28px 24px 60px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Search & Filter Controls */
+    .controls-panel {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .search-wrapper {
+      position: relative;
+      flex: 1;
+      min-width: 280px;
+      max-width: 480px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      color: var(--text-dim);
+      pointer-events: none;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 42px;
+      padding: 0 38px 0 38px;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      color: var(--text-main);
+      font-size: 13.5px;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+
+    .search-input::placeholder {
+      color: var(--text-dim);
+    }
+
+    .search-clear-btn {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      border-radius: 50%;
+    }
+
+    .search-clear-btn:hover {
+      color: var(--text-main);
+    }
+
+    .filter-tabs {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      background-color: var(--bg-surface);
+      padding: 4px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+    }
+
+    .filter-tab {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 12.5px;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      font-family: inherit;
+    }
+
+    .filter-tab:hover {
+      color: var(--text-main);
+    }
+
+    .filter-tab.active {
+      background-color: var(--bg-surface-active);
+      color: var(--text-main);
+    }
+
+    .filter-count {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      background-color: rgba(255, 255, 255, 0.06);
+      padding: 1px 6px;
+      border-radius: 9999px;
+      color: var(--text-dim);
+    }
+
+    .filter-tab.active .filter-count {
+      color: var(--text-main);
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Participant Feed */
+    .feed-card {
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .feed-header {
+      padding: 14px 20px;
+      background-color: rgba(255, 255, 255, 0.015);
+      border-bottom: 1px solid var(--border-subtle);
+      display: grid;
+      grid-template-columns: 2.5fr 1.8fr 1.4fr 1.5fr 24px;
+      align-items: center;
+      gap: 16px;
+      font-size: 11.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-dim);
+    }
+
+    .feed-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .participant-row {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: grid;
+      grid-template-columns: 2.5fr 1.8fr 1.4fr 1.5fr 24px;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      transition: background-color 0.15s ease, border-color 0.15s ease;
+      background-color: transparent;
+      user-select: none;
+    }
+
+    .participant-row:last-child {
+      border-bottom: none;
+    }
+
+    .participant-row:hover {
+      background-color: var(--bg-surface-hover);
+    }
+
+    .participant-row.selected {
+      background-color: var(--bg-surface-active);
+      border-left: 2px solid var(--accent);
+      padding-left: 18px;
+    }
+
+    /* Column Styles */
+    .col-identity {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .identity-main {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .participant-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .seat-badge {
+      font-size: 11px;
+      font-family: var(--font-mono);
+      font-weight: 500;
+      padding: 2px 7px;
+      border-radius: var(--radius-sm);
+      background-color: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-strong);
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .identity-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    .meta-roll {
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    .meta-divider {
+      color: var(--border-strong);
+    }
+
+    .meta-id {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    .col-timeline {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .timeline-primary {
+      font-size: 13px;
+      color: var(--text-main);
+      font-family: var(--font-mono);
+    }
+
+    .timeline-secondary {
+      font-size: 11.5px;
+      color: var(--text-dim);
+    }
+
+    .col-connection {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+    }
+
+    .conn-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .conn-dot.online {
+      background-color: var(--emerald);
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.5);
+    }
+
+    .conn-dot.offline {
+      background-color: var(--text-dim);
+    }
+
+    .col-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .status-pill {
+      font-size: 11.5px;
+      font-weight: 500;
+      padding: 3px 9px;
+      border-radius: 9999px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+    }
+
+    .status-registered {
+      background-color: rgba(148, 163, 184, 0.1);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      color: #94a3b8;
+    }
+
+    .status-in-progress {
+      background-color: var(--accent-soft);
+      border: 1px solid var(--accent-border);
+      color: #a5b4fc;
+    }
+
+    .status-submitted {
+      background-color: var(--emerald-soft);
+      border: 1px solid var(--emerald-border);
+      color: #6ee7b7;
+    }
+
+    .status-disconnected {
+      background-color: rgba(113, 113, 122, 0.1);
+      border: 1px solid rgba(113, 113, 122, 0.25);
+      color: #a1a1aa;
+    }
+
+    .status-time-expired {
+      background-color: var(--amber-soft);
+      border: 1px solid var(--amber-border);
+      color: #fcd34d;
+    }
+
+    .warning-pill {
+      font-size: 11px;
+      font-weight: 600;
+      font-family: var(--font-mono);
+      padding: 2px 7px;
+      border-radius: var(--radius-sm);
+      background-color: var(--rose-soft);
+      border: 1px solid var(--rose-border);
+      color: #fda4af;
+      white-space: nowrap;
+    }
+
+    .col-arrow {
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.15s ease, color 0.15s ease;
+    }
+
+    .participant-row:hover .col-arrow {
+      color: var(--text-main);
+      transform: translateX(2px);
+    }
+
+    .col-arrow svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    /* Empty & Loading States */
+    .empty-state {
+      padding: 60px 20px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: var(--text-muted);
+    }
+
+    .empty-state-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+
+    .empty-state-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .empty-state-title {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .empty-state-text {
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 380px;
+      line-height: 1.5;
+    }
+
+    /* Details Modal */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(5, 6, 10, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      width: 100%;
+      max-width: 620px;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      max-height: 88vh;
+      transform: scale(0.97) translateY(8px);
+      transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      overflow: hidden;
+    }
+
+    .modal-backdrop.open .modal-box {
+      transform: scale(1) translateY(0);
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      background-color: rgba(255, 255, 255, 0.015);
+    }
+
+    .modal-title-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .modal-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.2px;
+    }
+
+    .modal-subtitle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .modal-close-btn {
+      background: none;
+      border: none;
+      color: var(--text-dim);
+      cursor: pointer;
+      padding: 6px;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+    }
+
+    .modal-close-btn:hover {
+      background-color: rgba(255, 255, 255, 0.06);
+      color: var(--text-main);
+    }
+
+    .modal-close-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    .modal-body {
+      padding: 22px 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+
+    .details-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .detail-card {
+      background-color: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .detail-card.full-width {
+      grid-column: span 2;
+    }
+
+    .detail-label {
+      font-size: 11.5px;
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+
+    .detail-value {
+      font-size: 13.5px;
+      color: var(--text-main);
+      font-weight: 600;
+      word-break: break-all;
+    }
+
+    .detail-value.mono {
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      font-weight: 500;
+      color: #c7d2fe;
+    }
+
+    .detail-value-highlight {
+      color: #a5b4fc;
+      font-weight: 700;
+    }
+
+    /* Timeline List inside modal */
+    .timeline-card {
+      background-color: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .timeline-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      position: relative;
+    }
+
+    .timeline-item:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 22px;
+      bottom: -10px;
+      width: 1px;
+      background-color: var(--border-subtle);
+    }
+
+    .timeline-node {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      border: 2px solid var(--border-strong);
+      background-color: var(--bg-surface);
+      margin-top: 2px;
+      flex-shrink: 0;
+      z-index: 1;
+    }
+
+    .timeline-node.done {
+      border-color: var(--emerald);
+      background-color: var(--emerald);
+    }
+
+    .timeline-node.active {
+      border-color: var(--accent);
+      background-color: var(--accent);
+      box-shadow: 0 0 8px rgba(99, 102, 241, 0.5);
+    }
+
+    .timeline-content {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      flex: 1;
+    }
+
+    .timeline-step-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .timeline-step-time {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+    }
+
+    /* Violations details box */
+    .violations-container {
+      background-color: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .violations-list-empty {
+      padding: 24px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    .violation-entry {
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 12.5px;
+    }
+
+    .violation-entry:last-child {
+      border-bottom: none;
+    }
+
+    .violation-left {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .violation-type {
+      font-weight: 600;
+      color: #fda4af;
+    }
+
+    .violation-detail {
+      font-size: 11.5px;
+      color: var(--text-dim);
+    }
+
+    .violation-time {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+
+    .modal-footer {
+      padding: 14px 24px;
+      border-top: 1px solid var(--border-subtle);
+      background-color: rgba(255, 255, 255, 0.015);
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    /* Confirmation Dialog */
+    .confirm-dialog {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(5, 6, 10, 0.85);
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .confirm-dialog.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .confirm-box {
+      width: 100%;
+      max-width: 400px;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .confirm-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .confirm-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .confirm-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    /* Responsive */
+    @media (max-width: 840px) {
+      .topbar {
+        padding: 0 16px;
+      }
+      .brand-subtitle {
+        display: none;
+      }
+      .feed-header {
+        display: none;
+      }
+      .participant-row {
+        grid-template-columns: 1fr auto;
+        gap: 12px;
+        padding: 14px 16px;
+      }
+      .col-timeline, .col-connection {
+        display: none;
+      }
+      .col-arrow {
+        display: none;
+      }
+      .details-grid {
+        grid-template-columns: 1fr;
+      }
+      .detail-card.full-width {
+        grid-column: span 1;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Topbar -->
+  <header class="topbar">
+    <div class="brand-section">
+      <div class="brand-icon">
+        <img src="/techgati-logo.jpg" alt="Techgati Logo">
+      </div>
+      <span class="brand-title">Techgati Algorithm Quiz</span>
+    </div>
+
+    <div class="topbar-actions">
+      <button class="btn btn-danger" id="resetBtn" title="Reset all test data">
+        <span>Reset</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+
+    <!-- Search & Filter Controls -->
+    <div class="controls-panel">
+      <div class="search-wrapper">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input 
+          type="text" 
+          id="searchInput" 
+          class="search-input" 
+          placeholder="Search..." 
+          autocomplete="off"
+          spellcheck="false"
+        >
+        <button id="searchClearBtn" class="search-clear-btn" aria-label="Clear search">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="filter-tabs">
+        <button class="filter-tab active" data-filter="all">
+          <span>All</span>
+          <span class="filter-count" id="countAll">0</span>
+        </button>
+        <button class="filter-tab" data-filter="in_progress">
+          <span>In Progress</span>
+          <span class="filter-count" id="countInProgress">0</span>
+        </button>
+        <button class="filter-tab" data-filter="submitted">
+          <span>Submitted</span>
+          <span class="filter-count" id="countSubmitted">0</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Feed Card -->
+    <div class="feed-card">
+      <div class="feed-header">
+        <div>Participant</div>
+        <div>Timer</div>
+        <div>Connection</div>
+        <div>Status</div>
+        <div></div>
+      </div>
+
+      <div class="feed-list" id="feedList"></div>
+    </div>
+
+  </main>
+
+  <!-- Participant Detail Modal -->
+  <div class="modal-backdrop" id="detailModal">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalParticipantName">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <h2 class="modal-name" id="modalParticipantName">—</h2>
+          <div class="modal-subtitle">
+            <span id="modalRollNumber">—</span>
+            <span class="meta-divider">•</span>
+            <span id="modalSeatNumber">—</span>
+          </div>
+        </div>
+        <button class="modal-close-btn" id="modalCloseBtn" aria-label="Close modal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Overview Grid -->
+        <div>
+          <div class="section-label">Participant Overview</div>
+          <div class="details-grid">
+            <div class="detail-card">
+              <span class="detail-label">Current Status</span>
+              <div id="modalStatusBadge" style="margin-top: 4px;">—</div>
+            </div>
+            <div class="detail-card">
+              <span class="detail-label">Connection</span>
+              <div id="modalConnectionBadge" style="margin-top: 4px;">—</div>
+            </div>
+            <div class="detail-card">
+              <span class="detail-label">Total Warnings / Violations</span>
+              <span class="detail-value" id="modalWarningsCount">0</span>
+            </div>
+            <div class="detail-card">
+              <span class="detail-label">Calculated Duration</span>
+              <span class="detail-value detail-value-highlight" id="modalCalculatedDuration">—</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Timeline Section -->
+        <div>
+          <div class="section-label">Exam Milestones</div>
+          <div class="timeline-card">
+            <div class="timeline-item">
+              <div class="timeline-node done" id="timelineNodeReg"></div>
+              <div class="timeline-content">
+                <div class="timeline-step-title">Registered</div>
+                <div class="timeline-step-time" id="modalRegisteredAt">—</div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-node" id="timelineNodeStart"></div>
+              <div class="timeline-content">
+                <div class="timeline-step-title">Exam Started</div>
+                <div class="timeline-step-time" id="modalStartedAt">Not started</div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-node" id="timelineNodeSubmit"></div>
+              <div class="timeline-content">
+                <div class="timeline-step-title">Submission</div>
+                <div class="timeline-step-time" id="modalSubmittedAt">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recorded Violations -->
+        <div>
+          <div class="section-label">Recorded Warnings & Audit Log</div>
+          <div class="violations-container" id="modalViolationsList">
+            <div class="violations-list-empty">No warnings recorded for this participant.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="modalCloseActionBtn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reset Confirmation Dialog -->
+  <div class="confirm-dialog" id="confirmDialog">
+    <div class="confirm-box">
+      <h3 class="confirm-title">Reset All Data?</h3>
+      <div class="confirm-actions">
+        <button class="btn btn-secondary" id="cancelResetBtn">Cancel</button>
+        <button class="btn btn-danger" id="confirmResetBtn">Yes, Reset All</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Socket.IO -->
+  <script src="/socket.io/socket.io.js"></script>
+
+  <script>
+    // Global State
+    let participants = [];
+    let activeFilter = 'all';
+    let searchQuery = '';
+    let selectedParticipantId = null;
+    let participantViolationsCache = {};
+
+    const SERVER = window.location.origin;
+
+    // Elements
+    const feedList = document.getElementById('feedList');
+    const searchInput = document.getElementById('searchInput');
+    const searchClearBtn = document.getElementById('searchClearBtn');
+    const countAll = document.getElementById('countAll');
+    const countInProgress = document.getElementById('countInProgress');
+    const countSubmitted = document.getElementById('countSubmitted');
+    const detailModal = document.getElementById('detailModal');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+    const modalCloseActionBtn = document.getElementById('modalCloseActionBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const confirmDialog = document.getElementById('confirmDialog');
+    const cancelResetBtn = document.getElementById('cancelResetBtn');
+    const confirmResetBtn = document.getElementById('confirmResetBtn');
+
+    // Socket.IO Real-time Connection
+    const socket = io(SERVER);
+
+    socket.on('connect', () => {
+      socket.emit('join_admin');
+    });
+
+    socket.on('disconnect', () => {
+      console.log('[Dashboard] Disconnected');
+    });
+
+    socket.on('participants_updated', (data) => {
+      participants = data.participants || [];
+      updateCounts();
+      renderFeed();
+      if (selectedParticipantId) {
+        updateModalData(selectedParticipantId);
+      }
+    });
+
+    socket.on('participant_registered', (newParticipant) => {
+      // Automatic addition is backed by participants_updated, but ensure fresh fetch fallback
+      if (!participants.some(p => p.id === newParticipant.id)) {
+        fetch(`${SERVER}/api/participants`)
+          .then(r => r.json())
+          .then(data => {
+            participants = data.participants || [];
+            updateCounts();
+            renderFeed();
+          })
+          .catch(() => {});
+      }
+    });
+
+    socket.on('violation', (violation) => {
+      if (violation.participant_id) {
+        // Invalidate or prepend to cache
+        if (participantViolationsCache[violation.participant_id]) {
+          participantViolationsCache[violation.participant_id].unshift(violation);
+        }
+        if (selectedParticipantId === violation.participant_id) {
+          renderModalViolations(violation.participant_id);
+        }
+      }
+    });
+
+    // Helper: Format Dates & Timestamps
+    function formatTime(isoStr) {
+      if (!isoStr) return '—';
+      try {
+        const d = new Date(isoStr);
+        if (isNaN(d.getTime())) return '—';
+        return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      } catch (e) {
+        return '—';
+      }
+    }
+
+    function formatDateTime(isoStr) {
+      if (!isoStr) return '—';
+      try {
+        const d = new Date(isoStr);
+        if (isNaN(d.getTime())) return '—';
+        return d.toLocaleString([], {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        });
+      } catch (e) {
+        return '—';
+      }
+    }
+
+    function formatDuration(seconds) {
+      if (seconds === null || seconds === undefined || isNaN(seconds) || seconds < 0) return '—';
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60);
+      if (m >= 60) {
+        const h = Math.floor(m / 60);
+        const remM = m % 60;
+        return `${h}h ${remM}m ${s}s`;
+      }
+      return `${m}m ${String(s).padStart(2, '0')}s`;
+    }
+
+    // Exam Duration
+    function getExamDurationInfo(p) {
+      const isSubmitted = p.status === 'submitted';
+      const isInProgress = p.status === 'in_progress';
+      const startRef = p.exam_started_at || (isInProgress || isSubmitted ? p.registered_at : null);
+
+      if (!startRef && p.status === 'registered') {
+        return {
+          text: 'Not started',
+          isLive: false,
+          elapsedSeconds: 0
+        };
+      }
+
+      if (isSubmitted && startRef) {
+        const startMs = new Date(startRef).getTime();
+        const submitRef = p.submitted_at || p.last_heartbeat || new Date().toISOString();
+        const submitMs = new Date(submitRef).getTime();
+        const diffSeconds = Math.max(0, Math.floor((submitMs - startMs) / 1000));
+        return {
+          text: formatDuration(diffSeconds),
+          isLive: false,
+          elapsedSeconds: diffSeconds
+        };
+      }
+
+      if (isInProgress && startRef) {
+        const startMs = new Date(startRef).getTime();
+        const elapsedSeconds = Math.max(0, Math.floor((Date.now() - startMs) / 1000));
+        return {
+          text: `${formatDuration(elapsedSeconds)} (Elapsed)`,
+          isLive: true,
+          elapsedSeconds
+        };
+      }
+
+      if (p.status === 'registered') {
+        return {
+          text: 'Not started',
+          isLive: false,
+          elapsedSeconds: 0
+        };
+      }
+
+      return {
+        text: '—',
+        isLive: false,
+        elapsedSeconds: 0
+      };
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    function formatViolationName(type) {
+      if (!type) return 'Unknown Warning';
+      const map = {
+        'tab_switch': 'Tab Switch Detected',
+        'window_blur': 'Window Focus Lost',
+        'fullscreen_exit': 'Exited Fullscreen',
+        'key_violation': 'Prohibited Key Combination',
+        'dev_tools': 'Developer Tools Open',
+        'copy_paste': 'Clipboard Interaction',
+        'multiple_tabs': 'Secondary Tab Opened',
+        'right_click': 'Context Menu Attempt',
+        'new_tab_attempt': 'New Tab Attempt',
+        'print_screen': 'Screenshot / PrintScreen Attempt',
+        'blocked_fn_key': 'Function Key Prohibited',
+        'blocked_shortcut': 'Prohibited Shortcut Key',
+        'time_expired': 'Exam Time Expired'
+      };
+      return map[type] || type.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    }
+
+    // Filter Tabs Count
+    function updateCounts() {
+      const all = participants.length;
+      const inProg = participants.filter(p => p.status === 'in_progress').length;
+      const sub = participants.filter(p => p.status === 'submitted').length;
+
+      if (countAll) countAll.textContent = all;
+      if (countInProgress) countInProgress.textContent = inProg;
+      if (countSubmitted) countSubmitted.textContent = sub;
+    }
+
+    // Render Feed
+    function renderFeed() {
+      // Filter list
+      let filtered = [...participants];
+
+      // Tab filter
+      if (activeFilter === 'in_progress') {
+        filtered = filtered.filter(p => p.status === 'in_progress');
+      } else if (activeFilter === 'submitted') {
+        filtered = filtered.filter(p => p.status === 'submitted');
+      }
+
+      // Search query filter (name or roll)
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase().trim();
+        filtered = filtered.filter(p => 
+          (p.name && p.name.toLowerCase().includes(q)) ||
+          (p.roll && p.roll.toLowerCase().includes(q)) ||
+          (p.seat && p.seat.toLowerCase().includes(q))
+        );
+      }
+
+      // Guarantee newest registrations first
+      filtered.sort((a, b) => {
+        const timeA = a.registered_at ? new Date(a.registered_at).getTime() : 0;
+        const timeB = b.registered_at ? new Date(b.registered_at).getTime() : 0;
+        return timeB - timeA;
+      });
+
+      if (filtered.length === 0) {
+        feedList.innerHTML = '';
+        return;
+      }
+
+      // Build rows
+      feedList.innerHTML = filtered.map(p => {
+        const durationInfo = getExamDurationInfo(p);
+        const isOnline = Boolean(p.is_connected);
+        const warnings = p.warning_count || 0;
+        const seatText = p.seat && p.seat.trim() !== '' ? `Seat ${escapeHtml(p.seat.trim())}` : 'Seat —';
+        const isSelected = selectedParticipantId === p.id;
+
+        // Status badge
+        let statusBadgeHtml = '';
+        if (p.status === 'in_progress') {
+          statusBadgeHtml = `<span class="status-pill status-in-progress">In Progress</span>`;
+        } else if (p.status === 'submitted') {
+          statusBadgeHtml = `<span class="status-pill status-submitted">Submitted</span>`;
+        } else if (p.status === 'time_up') {
+          statusBadgeHtml = `<span class="status-pill status-time-expired">Time Expired</span>`;
+        }
+
+        const warningBadgeHtml = warnings > 0
+          ? `<span class="warning-pill">${warnings} ${warnings === 1 ? 'warning' : 'warnings'}</span>`
+          : '';
+
+        return `
+          <div class="participant-row ${isSelected ? 'selected' : ''}" data-id="${p.id}">
+            <!-- Identity -->
+            <div class="col-identity">
+              <div class="identity-main">
+                <span class="participant-name" title="${escapeHtml(p.name)}">${escapeHtml(p.name)}</span>
+                <span class="seat-badge">${seatText}</span>
+              </div>
+              <div class="identity-meta">
+                <span class="meta-roll">Roll: ${escapeHtml(p.roll)}</span>
+              </div>
+            </div>
+
+            <!-- Timer -->
+            <div class="col-timeline">
+              <span class="timeline-primary feed-duration" data-id="${p.id}">${durationInfo.text}</span>
+            </div>
+
+            <!-- Connection Status -->
+            <div class="col-connection">
+              <span class="conn-dot ${isOnline ? 'online' : 'offline'}"></span>
+              <span>${isOnline ? 'Connected' : 'Disconnected'}</span>
+            </div>
+
+            <!-- Exam Status & Warnings -->
+            <div class="col-status">
+              ${statusBadgeHtml}
+              ${warningBadgeHtml}
+            </div>
+
+            <!-- Chevron -->
+            <div class="col-arrow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      // Attach row click listeners
+      document.querySelectorAll('.participant-row').forEach(row => {
+        row.addEventListener('click', () => {
+          const id = row.getAttribute('data-id');
+          openParticipantDetails(id);
+        });
+      });
+    }
+
+    // Participant Details Modal
+    function openParticipantDetails(id) {
+      selectedParticipantId = id;
+
+      // Highlight active row in feed
+      document.querySelectorAll('.participant-row').forEach(row => {
+        row.classList.toggle('selected', row.getAttribute('data-id') === id);
+      });
+
+      updateModalData(id);
+      loadParticipantViolations(id);
+
+      detailModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      selectedParticipantId = null;
+      detailModal.classList.remove('open');
+      document.body.style.overflow = '';
+      document.querySelectorAll('.participant-row.selected').forEach(r => r.classList.remove('selected'));
+    }
+
+    function updateModalData(id) {
+      const p = participants.find(x => x.id === id);
+      if (!p) return;
+
+      document.getElementById('modalParticipantName').textContent = p.name || 'Unknown Candidate';
+      document.getElementById('modalRollNumber').textContent = p.roll ? `Roll: ${p.roll}` : 'No Roll Number';
+      document.getElementById('modalSeatNumber').textContent = p.seat && p.seat.trim() !== '' ? `Seat: ${p.seat.trim()}` : 'Seat: —';
+
+      // Status Badge
+      const statusBadgeContainer = document.getElementById('modalStatusBadge');
+      if (p.status === 'registered') {
+        statusBadgeContainer.innerHTML = `<span class="status-pill status-registered">Registered</span>`;
+      } else if (p.status === 'in_progress') {
+        statusBadgeContainer.innerHTML = `<span class="status-pill status-in-progress">In Progress</span>`;
+      } else if (p.status === 'submitted') {
+        statusBadgeContainer.innerHTML = `<span class="status-pill status-submitted">Submitted</span>`;
+      } else if (p.status === 'time_up') {
+        statusBadgeContainer.innerHTML = `<span class="status-pill status-time-expired">Time Expired</span>`;
+      } else {
+        statusBadgeContainer.innerHTML = `<span class="status-pill status-registered">${escapeHtml(p.status || 'Registered')}</span>`;
+      }
+
+      // Connection Status
+      const connContainer = document.getElementById('modalConnectionBadge');
+      const isOnline = Boolean(p.is_connected);
+      const lastActive = p.last_heartbeat ? `(Active: ${formatTime(p.last_heartbeat)})` : '';
+      connContainer.innerHTML = `
+        <div style="display:flex; align-items:center; gap:6px; font-size:13px;">
+          <span class="conn-dot ${isOnline ? 'online' : 'offline'}"></span>
+          <span>${isOnline ? 'Connected' : 'Disconnected'} ${lastActive}</span>
+        </div>
+      `;
+
+      // Warnings
+      const warningsCountEl = document.getElementById('modalWarningsCount');
+      const warnings = p.warning_count || 0;
+      if (warnings > 0) {
+        warningsCountEl.innerHTML = `<span class="warning-pill">${warnings} Recorded</span>`;
+      } else {
+        warningsCountEl.textContent = '0 Recorded';
+      }
+
+      // Duration & Milestones
+      const durationInfo = getExamDurationInfo(p);
+      document.getElementById('modalCalculatedDuration').textContent = durationInfo.text;
+
+      document.getElementById('modalRegisteredAt').textContent = formatDateTime(p.registered_at);
+
+      // Start Milestone
+      const startedAtEl = document.getElementById('modalStartedAt');
+      const nodeStart = document.getElementById('timelineNodeStart');
+      if (p.exam_started_at) {
+        startedAtEl.textContent = formatDateTime(p.exam_started_at);
+        nodeStart.className = 'timeline-node done';
+      } else if (p.status === 'in_progress') {
+        startedAtEl.textContent = `${formatDateTime(p.registered_at)} (Auto-started)`;
+        nodeStart.className = 'timeline-node active';
+      } else if (p.status === 'submitted') {
+        startedAtEl.textContent = formatDateTime(p.registered_at);
+        nodeStart.className = 'timeline-node done';
+      } else {
+        startedAtEl.textContent = 'Not started';
+        nodeStart.className = 'timeline-node';
+      }
+
+      // Submission Milestone
+      const submittedAtEl = document.getElementById('modalSubmittedAt');
+      const nodeSubmit = document.getElementById('timelineNodeSubmit');
+      if (p.submitted_at) {
+        submittedAtEl.textContent = formatDateTime(p.submitted_at);
+        nodeSubmit.className = 'timeline-node done';
+      } else if (p.status === 'submitted') {
+        submittedAtEl.textContent = formatDateTime(p.last_heartbeat || new Date().toISOString());
+        nodeSubmit.className = 'timeline-node done';
+      } else if (p.status === 'in_progress') {
+        submittedAtEl.textContent = 'Exam in progress...';
+        nodeSubmit.className = 'timeline-node active';
+      } else {
+        submittedAtEl.textContent = '—';
+        nodeSubmit.className = 'timeline-node';
+      }
+    }
+
+    // Load Violations
+    function loadParticipantViolations(id) {
+      const container = document.getElementById('modalViolationsList');
+      container.innerHTML = `<div class="violations-list-empty">Loading recorded logs...</div>`;
+
+      fetch(`${SERVER}/api/violations/${encodeURIComponent(id)}`)
+        .then(r => r.json())
+        .then(data => {
+          participantViolationsCache[id] = data.violations || [];
+          renderModalViolations(id);
+        })
+        .catch(err => {
+          container.innerHTML = `<div class="violations-list-empty">Could not load violation logs.</div>`;
+        });
+    }
+
+    function renderModalViolations(id) {
+      const container = document.getElementById('modalViolationsList');
+      const list = participantViolationsCache[id] || [];
+
+      if (list.length === 0) {
+        container.innerHTML = `<div class="violations-list-empty">No warnings or security violations recorded for this candidate.</div>`;
+        return;
+      }
+
+      container.innerHTML = list.map(v => {
+        let detailsText = '';
+        if (v.details) {
+          try {
+            const parsed = typeof v.details === 'string' ? JSON.parse(v.details) : v.details;
+            if (typeof parsed === 'object') {
+              detailsText = Object.entries(parsed).map(([k, val]) => `${k}: ${val}`).join(' • ');
+            }
+          } catch (e) {
+            detailsText = String(v.details);
+          }
+        }
+
+        return `
+          <div class="violation-entry">
+            <div class="violation-left">
+              <span class="violation-type">${escapeHtml(formatViolationName(v.type))}</span>
+              ${detailsText ? `<span class="violation-detail">${escapeHtml(detailsText)}</span>` : ''}
+            </div>
+            <span class="violation-time">${formatTime(v.timestamp)}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // 1-Second Live Timer Loop
+    setInterval(() => {
+      const liveEls = document.querySelectorAll('.feed-duration');
+      liveEls.forEach(el => {
+        const id = el.getAttribute('data-id');
+        const p = participants.find(x => x.id === id);
+        if (p && p.status === 'in_progress') {
+          const info = getExamDurationInfo(p);
+          el.textContent = info.text;
+        }
+      });
+
+      if (selectedParticipantId) {
+        const modalP = participants.find(x => x.id === selectedParticipantId);
+        if (modalP && modalP.status === 'in_progress') {
+          const info = getExamDurationInfo(modalP);
+          const durEl = document.getElementById('modalCalculatedDuration');
+          if (durEl) durEl.textContent = info.text;
+        }
+      }
+    }, 1000);
+
+    // Filter Tabs
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        activeFilter = tab.getAttribute('data-filter');
+        renderFeed();
+      });
+    });
+
+    // Search Input Handlers
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value;
+      searchClearBtn.style.display = searchQuery ? 'flex' : 'none';
+      renderFeed();
+    });
+
+    searchClearBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      searchQuery = '';
+      searchClearBtn.style.display = 'none';
+      searchInput.focus();
+      renderFeed();
+    });
+
+    // Modal Dismissal Handlers
+    modalCloseBtn.addEventListener('click', closeModal);
+    modalCloseActionBtn.addEventListener('click', closeModal);
+
+    detailModal.addEventListener('click', (e) => {
+      if (e.target === detailModal) {
+        closeModal();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (confirmDialog.classList.contains('open')) {
+          confirmDialog.classList.remove('open');
+        } else if (detailModal.classList.contains('open')) {
+          closeModal();
+        }
+      }
+    });
+
+    // Reset Confirmation Dialog
+    resetBtn.addEventListener('click', () => {
+      confirmDialog.classList.add('open');
+    });
+
+    cancelResetBtn.addEventListener('click', () => {
+      confirmDialog.classList.remove('open');
+    });
+
+    confirmDialog.addEventListener('click', (e) => {
+      if (e.target === confirmDialog) {
+        confirmDialog.classList.remove('open');
+      }
+    });
+
+    confirmResetBtn.addEventListener('click', () => {
+      confirmResetBtn.disabled = true;
+      confirmResetBtn.textContent = 'Resetting...';
+
+      fetch(`${SERVER}/api/reset`, { method: 'POST' })
+        .then(r => r.json())
+        .then(() => {
+          participants = [];
+          participantViolationsCache = {};
+          closeModal();
+          confirmDialog.classList.remove('open');
+          updateCounts();
+          renderFeed();
+        })
+        .catch(err => {
+          alert('Failed to reset data.');
+        })
+        .finally(() => {
+          confirmResetBtn.disabled = false;
+          confirmResetBtn.textContent = 'Yes, Reset All';
+        });
+    });
+
+    // Initial Fetch
+    fetch(`${SERVER}/api/participants`)
+      .then(r => r.json())
+      .then(data => {
+        participants = data.participants || [];
+        updateCounts();
+        renderFeed();
+      })
+      .catch(err => {
+        feedList.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-title">Failed to load participant data</div>
+            <div class="empty-state-text">Could not connect to the server at ${SERVER}. Please verify that the monitoring server is running.</div>
+          </div>
+        `;
+      });
+
+  </script>
+</body>
+</html>
